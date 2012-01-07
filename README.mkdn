@@ -1,0 +1,58 @@
+THWebViewController - Tiny implementation of WebViewController
+==============================================================
+
+DESCRIPTION
+-----------
+
+This is a tiny library for iOS(iPhone/iPad).
+This library only provides one class named THWebViewController.
+So it's same as TTWebViewController and NIWebViewController.
+Yes, THWebViewController is forked from NIWebViewController.
+
+You can drop in 1 header, 1 code, 1 bundles, that's all.
+Very easy.
+
+I don't like large application frameworks for iOS application.
+Since I'm minimalist.
+
+SYNOPSIS
+--------
+
+    THWebViewController * webController = [[THWebViewController alloc] init];
+    [webController openURL:[NSURL URLWithString:@"http://tou.ch/"]];
+    [self.navigationController pushViewController:webController
+                                         animated:YES];
+
+DEPENDENCIES
+------------
+
+There is no dependencies.
+
+SUBCLASSING
+-----------
+
+THWebViewController supports subclassing.
+
+THWebViewController is UIViewController < UIWebViewDelegate, UIActionSheetDelegate >.
+
+You can override following methods in your subclass.
+
+  * UIWebViewDelegate
+    * - webView:shouldStartLoadWithRequest:navigationType:
+    * - webViewDidStartLoad:
+    * - webViewDidFinishLoad:
+    * - webView:didFailLoadWithError:
+  * UIActionSheetDelegate
+    * - actionSheet:clickedButtonAtIndex:
+    * - actionSheet:didDismissWithButtonIndex:
+
+CREDITS
+-------
+
+
+LICENSE
+-------
+
+Apache License(Same as nimbus, three20)
+For more details, please read LICENSE file.
+
