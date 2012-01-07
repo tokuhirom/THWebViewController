@@ -224,7 +224,7 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
   _activityItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
 
   UIImage* backIcon = [UIImage imageWithContentsOfFile:
-                      NIPathForBundleResource(nil, @"NimbusWebController.bundle/gfx/backIcon.png")];
+                      NIPathForBundleResource(nil, @"THWebController.bundle/gfx/backIcon.png")];
   // We weren't able to find the forward or back icons in your application's resources.
   // Ensure that you've dragged the NimbusWebController.bundle from src/webcontroller/resources
   //into your application with the "Create Folder References" option selected. You can verify that
@@ -242,7 +242,7 @@ static NSString* NIPathForBundleResource(NSBundle* bundle, NSString* relativePat
   _backButton.enabled = NO;
 
   UIImage* forwardIcon = [UIImage imageWithContentsOfFile:
-                  NIPathForBundleResource(nil, @"NimbusWebController.bundle/gfx/forwardIcon.png")];
+                  NIPathForBundleResource(nil, @"THWebController.bundle/gfx/forwardIcon.png")];
   // We weren't able to find the forward or back icons in your application's resources.
   // Ensure that you've dragged the NimbusWebController.bundle from src/webcontroller/resources
   // into your application with the "Create Folder References" option selected. You can verify that
