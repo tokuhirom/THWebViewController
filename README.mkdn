@@ -1,6 +1,8 @@
 THWebViewController - Tiny implementation of WebViewController
 ==============================================================
 
+![Snapshot](snapshot.png)
+
 DESCRIPTION
 -----------
 
