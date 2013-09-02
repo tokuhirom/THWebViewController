@@ -276,7 +276,7 @@
 		A811805914B808C000FEADDD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "THWebViewControllerExample/THWebViewControllerExample-Prefix.pch";
 				INFOPLIST_FILE = "THWebViewControllerExample/THWebViewControllerExample-Info.plist";
@@ -288,7 +288,7 @@
 		A811805A14B808C000FEADDD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "THWebViewControllerExample/THWebViewControllerExample-Prefix.pch";
 				INFOPLIST_FILE = "THWebViewControllerExample/THWebViewControllerExample-Info.plist";
@@ -316,6 +316,7 @@
 				A811805A14B808C000FEADDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

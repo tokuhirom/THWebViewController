@@ -1,7 +1,6 @@
 //
 // Copyright 2011 Roger Chapman
 // Copyright 2011 Benedikt Meurer
-// Copyright 2012 Tokunaga HIromu
 //
 // Forked from Three20 July 29, 2011 - Copyright 2009-2011 Facebook
 //
@@ -18,56 +17,13 @@
 // limitations under the License.
 //
 
-/**
- * @defgroup NimbusWebController Nimbus Web Controller
- * @{
- *
- * This controller presents a UIWebView with a toolbar containing basic chrome for interacting
- * with it. The chrome shows forward, back, stop and refresh buttons on a toolbar aligned
- * to the bottom of the view controller's view. The toolbar includes an option to open the
- * URL in Safari. If the controller is shown in a navigation controller, self.title will
- * show the current web page's title. A spinner will be shown in the navigation bar's right
- * bar button area if there are any active requests.
- *
- *
- * <h2>Adding the Web Controller to Your Application</h2>
- *
- * The web controller uses a small number of custom icons that are stored in the
- * NimbusWebController bundle. You must add this bundle to your application, ensuring
- * that you select the "Create Folder References" option and that the bundle is
- * copied in the "Copy Bundle Resources" phase.
- *
- * The bundle can be found at <code>src/webcontroller/resources/NimbusWebController.bundle</code>.
- *
- *
- * <h2>Future Goals</h2>
- *
- * - Better use of screen real estate on the iPad. We will ideally provide multiple implementation
- *   styles. For example: native Safari, with the toolbar at the top; native Twitter, with the
- *   toolbar at the bottom; plain, with no toolbar at all.
- *
- *
- * <h2>Example Applications</h2>
- *
- * <h3>Basic Web Controller</h3>
- *
- * <a
- * href="https://github.com/jverkoey/nimbus/tree/master/examples/webcontroller/BasicWebController">
- * View the README on GitHub</a>
- *
- * This sample application demos the use of the web controller on the iPhone and iPad.
- *
- * <h2>Screenshots</h2>
- *
- * @image html webcontroller-iphone-example1.png "Screenshot of a basic web controller on the iPhone"
- *
- * @}*/
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+//#import "NIPreprocessorMacros.h" /* for NI_WEAK */
 
 /**
  * A simple web view controller implementation with a toolbar.
- *
- *      @ingroup NimbusWebController
- *
  *
  * <h2>Subclassing</h2>
  *
@@ -116,74 +72,136 @@
  * @code
  *  [webController setToolbarTintColor:[UIColor blackColor]];
  * @endcode
+ *
+ *      @ingroup NimbusWebController
+ */
+#if defined(__has_feature) && __has_feature(objc_arc_weak)
+#define NI_WEAK weak
+#define NI_STRONG strong
+#elif defined(__has_feature)  && __has_feature(objc_arc)
+#define NI_WEAK unsafe_unretained
+#define NI_STRONG retain
+#else
+#define NI_WEAK assign
+#define NI_STRONG retain
+#endif
+
+
+
+
+@interface THWebController : UIViewController <UIWebViewDelegate, UIActionSheetDelegate>
+
+// Designated initializer.
+- (id)initWithRequest:(NSURLRequest *)request;
+- (id)initWithURL:(NSURL *)URL;
+
+- (NSURL *)URL;
+
+- (void)openURL:(NSURL*)URL;
+- (void)openRequest:(NSURLRequest*)request;
+- (void)openHTMLString:(NSString*)htmlString baseURL:(NSURL*)baseUrl;
+
+@property (nonatomic, readwrite, assign, getter = isToolbarHidden) BOOL toolbarHidden;
+@property (nonatomic, readwrite, NI_WEAK) UIColor* toolbarTintColor;
+
+@property (nonatomic, readonly, NI_STRONG) UIWebView* webView;
+
+// Subclassing
+- (BOOL)shouldPresentActionSheet:(UIActionSheet *)actionSheet;
+@property (nonatomic, readwrite, NI_STRONG) NSURL* actionSheetURL;
+
+@end
+
+/** @name Creating a Web Controller */
+
+/**
+ * Initializes a newly allocated web controller with a given request.
+ *
+ * Once the controller is presented it will begin loading the given request.
+ *
+ * This is the designated initializer.
+ *
+ *      @fn NIWebController::initWithRequest:
  */
 
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
+/**
+ * Initializes a newly allocated web controller with a given URL to request.
+ *
+ * Once the controller is presented it will begin loading the given URL.
+ *
+ *      @fn NIWebController::initWithURL:
+ */
 
-@interface THWebController : UIViewController <
-  UIWebViewDelegate,
-  UIActionSheetDelegate > {
-@protected
-  // Views
-  UIWebView*        _webView;
-  UIToolbar*        _toolbar;
-  UIActionSheet*    _actionSheet;
-  
-  // Toolbar buttons
-  UIBarButtonItem*  _backButton;
-  UIBarButtonItem*  _forwardButton;
-  UIBarButtonItem*  _refreshButton;
-  UIBarButtonItem*  _stopButton;
-  UIBarButtonItem*  _actionButton;
-  UIBarButtonItem*  _activityItem;
-
-  NSURL*            _actionSheetURL;
-  NSURL*            _loadingURL;
-}
+/** @name Accessing the Request Attributes */
 
 /**
  * The current web view URL.
  *
- * If the web view is currently loading a URL then the loading URL is returned instead.
+ * If the web view is currently loading a URL then the loading URL is returned.
+ * Otherwise this will be the last URL that was loaded.
+ *
+ *      @fn NIWebController::URL:
  */
-- (NSURL *)URL;
+
+/** @name Loading a Request */
 
 /**
- * Opens the given URL in the web view.
+ * Loads a request with the given URL in the web view.
+ *
+ *      @fn NIWebController::openURL:
  */
-- (void)openURL:(NSURL*)URL;
 
 /**
  * Load the given request using UIWebView's loadRequest:.
  *
  *      @param request  A URL request identifying the location of the content to load.
+ *
+ *      @fn NIWebController::openRequest:
  */
-- (void)openRequest:(NSURLRequest*)request;
 
 /**
- * Sets the visibility of the toolbar.
+ * Load the given request using UIWebView's loadHTMLString:baseURL:.
+ *
+ *      @param htmlString  The content for the main page.
+ *      @param baseUrl  The base URL for the content.
+ *
+ *      @fn NIWebController::openHTMLString:baseURL:
+ */
+
+/** @name Accessing the Toolbar */
+
+/**
+ * The visibility of the toolbar.
  *
  * If the toolbar is hidden then the web view will take up the controller's entire view.
- */
-- (void)setToolbarHidden:(BOOL)hidden;
-
-/**
- * Sets the toolbar to the given color.
- */
-- (void)setToolbarTintColor:(UIColor*)color;
-
-/**
- * This message is send to the receiver in response to the user clicking the action toolbar button.
  *
- * You can provide your own implementation in your subclass and customize the @c actionSheet
+ *      @fn NIWebController::toolbarHidden
+ */
+
+/**
+ * The tint color of the toolbar.
+ *
+ *      @fn NIWebController::toolbarTintColor
+ */
+
+/** @name Accessing the Web View */
+
+/**
+ * The internal web view.
+ *
+ *      @fn NIWebController::webView
+ */
+
+/** @name Subclassing the Web Controller */
+
+/**
+ * This message is called in response to the user clicking the action toolbar button.
+ *
+ * You can provide your own implementation in your subclass and customize the actionSheet
  * that is shown to the user or even cancel the presentation of the @c actionSheet by
- * returning @c NO from your implementation.
+ * returning NO from your implementation.
  *
- * @param actionSheet The UIActionSheet that will be presented to the user.
- *
- * @return @c YES to present the @p actionSheet, @c NO if you want to perform a custom action.
+ *      @param actionSheet The UIActionSheet that will be presented to the user.
+ *      @return YES to present the actionSheet, NO if you want to perform a custom action.
+ *      @fn NIWebController::shouldPresentActionSheet:
  */
-- (BOOL)shouldPresentActionSheet:(UIActionSheet *)actionSheet;
-
-@end
